@@ -1,0 +1,8 @@
+{
+  "name": "config-dsl",
+  "version": "0.1.0",
+  "description": "DSL for reading typed configuration from the environment",
+  "main": "dist/index.js",
+  "author": "Jukka Parkki",
+  "license": "MIT"
+}
