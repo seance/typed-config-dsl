@@ -4,5 +4,8 @@
   "description": "DSL for reading typed configuration from the environment",
   "main": "dist/index.js",
   "author": "Jukka Parkki",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^3.7.5"
+  }
 }
