@@ -116,45 +116,59 @@ export const mapConfigValidation = <A, B>(f: (value: A) => B) => (
   return (validation as unknown) as ConfigValidation<B>;
 };
 
+const maxWidth = (max: number, str: string) => Math.max(max, str.length);
+
+const padToWidth = (width: number) => (str: string) =>
+  `${str}${' '.repeat(Math.max(0, width - str.length))}`;
+
+const padColumnsToMaxWidth = (columns: string[][]): string[][] => {
+  const maxWidths = columns.map((c) => c.reduce(maxWidth, 0));
+  return maxWidths.map((maxWidth, i) => columns[i].map(padToWidth(maxWidth)));
+};
+
 export const printValidConfig = <A>(config: ConfigValidation<A>): void => {
-  console.log(
-    [
-      'Configuration read from environment:',
-      ...config.valids.map((v) =>
-        [
-          ' - ',
-          v.key,
-          `(${v.type})`,
-          v.sensitive ? '(sensitive)' : v.value ?? '(undefined)',
-        ].join(' '),
-      ),
-    ].join('\n'),
-  );
+  const columns = padColumnsToMaxWidth([
+    config.valids.map((v) => ` - ${v.key}`),
+    config.valids.map((v) => v.type),
+    config.valids.map((v) =>
+      v.sensitive ? '(sensitive)' : `${v.value}` ?? '(undefined)',
+    ),
+  ]);
+  const rows = config.valids.map((_, i) => columns.map((c) => c[i]).join(' '));
+  console.log(['Configuration read:', ...rows].join('\n'));
 };
 
 export const throwConfigError = <A>(config: ConfigValidation<A>): never => {
+  const missingKeysColumns = padColumnsToMaxWidth([
+    config.missingKeys.map((v) => ` - ${v.key}`),
+    config.missingKeys.map((v) => v.type),
+  ]);
+  const malformedValuesColumns = padColumnsToMaxWidth([
+    config.malformedValues.map((v) => ` - ${v.key}`),
+    config.malformedValues.map((v) => v.type),
+    config.malformedValues.map((v) =>
+      v.sensitive ? '(sensitive)' : v.value ?? '(undefined)',
+    ),
+    config.malformedValues.map((v) => v.message ?? ''),
+  ]);
+  const missingKeysRows = config.missingKeys.map((_, i) =>
+    missingKeysColumns.map((c) => c[i]).join(' '),
+  );
+  const malformedValuesRows = config.malformedValues.map((_, i) =>
+    malformedValuesColumns.map((c) => c[i]).join(' '),
+  );
   throw new Error(
     `Invalid configuration:\n${[
-      ...(config.missingKeys.length
+      ...(missingKeysRows.length
         ? [
-            'Missing following configuration keys:',
-            ...config.missingKeys.map((v) =>
-              [' - ', v.key, `(${v.type})`].join(' '),
-            ),
+            'Missing values for following configuration keys:',
+            ...missingKeysRows,
           ]
         : []),
-      ...(config.malformedValues.length
+      ...(malformedValuesRows.length
         ? [
             'Malformed values for following configuration keys:',
-            ...config.malformedValues.map((v) =>
-              [
-                ' - ',
-                v.key,
-                `(${v.type})`,
-                v.sensitive ? '(sensitive)' : v.value ?? '(undefined)',
-                v.message,
-              ].join(' '),
-            ),
+            ...malformedValuesRows,
           ]
         : []),
     ].join('\n')}`,
