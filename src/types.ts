@@ -74,3 +74,7 @@ export type ShapeReader<A> = {
 };
 
 export type Reader<A> = ConfigReader<A> | ShapeReader<A>;
+
+export interface Options {
+  silent: boolean;
+}

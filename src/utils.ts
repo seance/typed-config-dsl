@@ -3,6 +3,7 @@ import {
   Validation,
   ConfigValidation,
   ValidConfig,
+  InvalidConfig,
   Valid,
   MissingKey,
   MalformedValue,
@@ -126,19 +127,23 @@ const padColumnsToMaxWidth = (columns: string[][]): string[][] => {
   return maxWidths.map((maxWidth, i) => columns[i].map(padToWidth(maxWidth)));
 };
 
-export const printValidConfig = <A>(config: ConfigValidation<A>): void => {
+export const getValidConfigMessage = <A>(config: ValidConfig<A>): string => {
   const columns = padColumnsToMaxWidth([
     config.valids.map((v) => ` - ${v.key}`),
     config.valids.map((v) => v.type),
     config.valids.map((v) =>
-      v.sensitive ? '(sensitive)' : `${v.value}` ?? '(undefined)',
+      v.sensitive
+        ? '(sensitive)'
+        : v.value !== undefined
+        ? `${v.value}`
+        : '(undefined)',
     ),
   ]);
   const rows = config.valids.map((_, i) => columns.map((c) => c[i]).join(' '));
-  console.log(['Configuration read:', ...rows].join('\n'));
+  return ['Configuration read:', ...rows].join('\n');
 };
 
-export const throwConfigError = <A>(config: ConfigValidation<A>): never => {
+export const getInvalidConfigMessage = (config: InvalidConfig): string => {
   const missingKeysColumns = padColumnsToMaxWidth([
     config.missingKeys.map((v) => ` - ${v.key}`),
     config.missingKeys.map((v) => v.type),
@@ -157,20 +162,23 @@ export const throwConfigError = <A>(config: ConfigValidation<A>): never => {
   const malformedValuesRows = config.malformedValues.map((_, i) =>
     malformedValuesColumns.map((c) => c[i]).join(' '),
   );
-  throw new Error(
-    `Invalid configuration:\n${[
-      ...(missingKeysRows.length
-        ? [
-            'Missing values for following configuration keys:',
-            ...missingKeysRows,
-          ]
-        : []),
-      ...(malformedValuesRows.length
-        ? [
-            'Malformed values for following configuration keys:',
-            ...malformedValuesRows,
-          ]
-        : []),
-    ].join('\n')}`,
-  );
+  return `Invalid configuration:\n${[
+    ...(missingKeysRows.length
+      ? ['Missing values for following configuration keys:', ...missingKeysRows]
+      : []),
+    ...(malformedValuesRows.length
+      ? [
+          'Malformed values for following configuration keys:',
+          ...malformedValuesRows,
+        ]
+      : []),
+  ].join('\n')}`;
+};
+
+export const printValidConfig = <A>(config: ValidConfig<A>): void => {
+  console.log(getValidConfigMessage(config));
+};
+
+export const throwConfigError = (config: InvalidConfig): never => {
+  throw new Error(getInvalidConfigMessage(config));
 };
