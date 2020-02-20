@@ -9,6 +9,10 @@ const defaultOptions: Options = {
   silent: false,
 };
 
+export const production = 'production' as const;
+export const test = 'test' as const;
+export const development = 'development' as const;
+
 export const readConfig = <A>(r: Reader<A>, options?: Partial<Options>): A => {
   const _options = { ...defaultOptions, ...(options ?? {}) };
   const validation = readConfigValidation(r);

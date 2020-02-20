@@ -8,9 +8,16 @@ export interface ArrayConfigReaderBuilder {
   boolean: () => ConfigReaderDsl<boolean[]>;
 }
 
+export type Environment = string;
+
 export interface OptionalDsl<A> {
-  optional: () => ConfigReader<A | undefined> & SensitiveDsl<A | undefined>;
-  default: (defaultValue: A) => ConfigReader<A> & SensitiveDsl<A>;
+  optional: (
+    ...optionalEnvs: Environment[]
+  ) => ConfigReader<A | undefined> & SensitiveDsl<A | undefined>;
+  default: (
+    defaultValue: A,
+    ...defaultEnvs: Environment[]
+  ) => ConfigReader<A> & SensitiveDsl<A>;
 }
 
 export interface SensitiveDsl<A> {
