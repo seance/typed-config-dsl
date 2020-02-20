@@ -2,6 +2,12 @@ export interface ConfigReader<A> {
   read: () => Validation<A>;
 }
 
+export interface ArrayConfigReaderBuilder {
+  string: () => ConfigReaderDsl<string[]>;
+  number: () => ConfigReaderDsl<number[]>;
+  boolean: () => ConfigReaderDsl<boolean[]>;
+}
+
 export interface OptionalDsl<A> {
   optional: () => ConfigReader<A | undefined> & SensitiveDsl<A | undefined>;
   default: (defaultValue: A) => ConfigReader<A> & SensitiveDsl<A>;
@@ -49,9 +55,7 @@ export interface MalformedValue {
   message?: string;
 }
 
-export type ConfigValidation<A> =
-  | ValidConfig<A>
-  | InvalidConfig;
+export type ConfigValidation<A> = ValidConfig<A> | InvalidConfig;
 
 interface ConfigValidationFields {
   valids: Valid<unknown>[];

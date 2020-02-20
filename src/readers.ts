@@ -8,6 +8,18 @@ import {
 import { transformAndValidate } from './validation';
 import { valid, missingKey } from './utils';
 
+export const constantReader = <A>(
+  value: A,
+  sensitive: boolean = false,
+): ConfigReader<A> & SensitiveDsl<A> => ({
+  read() {
+    return valid(value, '(constant)', typeof value, sensitive);
+  },
+  sensitive() {
+    return constantReader(value, true);
+  },
+});
+
 export const optionalReader = <A>(
   key: string,
   type: string,
