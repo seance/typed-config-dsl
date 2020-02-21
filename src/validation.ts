@@ -1,5 +1,10 @@
 import { Transform, Validator, Validation } from './types';
-import { ConfigReader, ShapeReader, Reader, ConfigValidation } from './types';
+import {
+  ConfigReader,
+  ShapeReader,
+  ConfigLikeReader,
+  ConfigValidation,
+} from './types';
 import {
   malformedValue,
   isConfigReader,
@@ -30,8 +35,9 @@ const readShapeValidation = <A extends {}>(
   shape: ShapeReader<A>,
 ): ConfigValidation<A> =>
   Object.entries(shape).reduce((validationForA, [k, r]) => {
+    type AK = A[keyof A];
     const mapToKey = mapConfigValidation((v) => ({ [k]: v } as Partial<A>));
-    const validationForK = readConfigValidation(r as Reader<A[keyof A]>);
+    const validationForK = readConfigValidation(r as ConfigLikeReader<AK>);
     return mergeConfigValidation(validationForA, mapToKey(validationForK));
   }, validConfig<Partial<A>>({})) as ConfigValidation<A>;
 
@@ -45,5 +51,7 @@ const readReaderValidation = <A>(
   )(reader.read());
 };
 
-export const readConfigValidation = <A>(r: Reader<A>): ConfigValidation<A> =>
+export const readConfigValidation = <A>(
+  r: ConfigLikeReader<A>,
+): ConfigValidation<A> =>
   isConfigReader(r) ? readReaderValidation(r) : readShapeValidation(r);

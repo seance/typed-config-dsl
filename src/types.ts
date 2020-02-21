@@ -80,7 +80,7 @@ export type ShapeReader<A> = {
   [K in keyof A]: ConfigReader<A[K]> | ShapeReader<A[K]>;
 };
 
-export type Reader<A> = ConfigReader<A> | ShapeReader<A>;
+export type ConfigLikeReader<A> = ConfigReader<A> | ShapeReader<A>;
 
 export interface Options {
   silent: boolean;
