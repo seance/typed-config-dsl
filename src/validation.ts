@@ -27,7 +27,7 @@ export const transformAndValidate = <A>(
     const value = transform(raw);
     return validator(value, type, sensitive, raw);
   } catch (err) {
-    return malformedValue(key, type, raw, err.message);
+    return malformedValue(key, type, raw, sensitive, err.message);
   }
 };
 
