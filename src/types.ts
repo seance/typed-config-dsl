@@ -64,7 +64,7 @@ export interface MalformedValue {
 
 export type ConfigValidation<A> = ValidConfig<A> | InvalidConfig;
 
-interface ConfigValidationFields {
+export interface ConfigValidationFields {
   valids: Valid<unknown>[];
   missingKeys: MissingKey[];
   malformedValues: MalformedValue[];
