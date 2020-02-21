@@ -124,7 +124,7 @@ In addition, object literals with `ConfigReader<A>` leaf values can be used to r
 #### `constant<A>`
 
 |Parameter|Type|Default|Description|
-|-|-|-||
+|---|---|---|---|
 |`value`|`A`|n/a|The constant value to be returned by the reader.|
 
 Builds a reader for a constant value. This is useful when you want to hard code a value in your configuration object.
@@ -137,7 +137,7 @@ const reader: ConfigReader<number> = constant(42);
 #### `string`
 
 |Parameter|Type|Default|Description|
-|-|-|-||
+|---|---|---|---|
 |`key`|`string`|n/a|The key of the environment variable to read.|
 
 Builds a *required* reader for a string-valued configuration key.
@@ -150,7 +150,7 @@ const reader: ConfigReader<string> = string('FOO');
 #### `number`
 
 |Parameter|Type|Default|Description|
-|-|-|-||
+|---|---|---|---|
 |`key`|`string`|n/a|The key of the environment variable to read.|
 
 Builds a *required* reader for a number-valued configuration key. The value is parsed using `readFloat` and checked to not be `NaN`.
@@ -163,7 +163,7 @@ const reader: ConfigReader<number> = number('FOO');
 #### `boolean`
 
 |Parameter|Type|Default|Description|
-|-|-|-||
+|---|---|---|---|
 |`key`|`string`|n/a|The key of the environment variable to read.|
 
 Builds a *required* reader for a boolean-valued configuration key. The value is required to be either `true` or `false`.
@@ -176,7 +176,7 @@ const reader: ConfigReader<boolean> = number('FOO');
 #### `array`
 
 |Parameter|Type|Default|Description|
-|-|-|-||
+|---|---|---|---|
 |`key`|`string`|n/a|The key of the environment variable to read.|
 |`separator`|`string`|`,`|The delimiter token for string splitting.|
 
@@ -213,7 +213,7 @@ These combinators exist as methods on a `ConfigReader<A>`. If a reader is both o
 #### `optional`
 
 |Parameter|Type|Default|Description|
-|-|-|-||
+|---|---|---|---|
 |`...environment`|`string[]`|`[]`|Names of environments in which the key is optional.|
 
 Marks the extended reader as *optional*. It's type `A` is extended statically to be `A | undefined`.
@@ -226,7 +226,7 @@ const reader: ConfigReader<number | undefined> = number('FOO').optional();
 #### `default`
 
 |Parameter|Type|Default|Description|
-|-|-|-||
+|---|---|---|---|
 |`defaultValue`|`A`|n/a|The value to be used if the key is not present.|
 |`...environment`|`string[]`|`[]`|Names of environments in which the key is optional.|
 
@@ -255,14 +255,14 @@ The DSL specifies a `ConfigReader<A>` for some type `A`. To actually read a valu
 ### `readConfig<A>`
 
 |Parameter|Type|Default|Description|
-|-|-|-||
+|---|---|---|---|
 |`reader`|`ConfigLikeReader<A>`|n/a|The reader that will be used to read a value of type `A`.|
 |`options`|`Options`|`defaultOptions`|Options for reading the configuration.|
 
 Options, `defaultOptions` are as in the default column.
 
 |Option|Type|Default|Description|
-|-|-|-||
+|---|---|---|---|
 |`silent`|`boolean`|`false`|If `true`, don't log the successfully read configuration.|
 |`logger`|`(message: string) => void`|`console.log`|A logger for logging messages.|
 
