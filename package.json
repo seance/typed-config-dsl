@@ -6,6 +6,10 @@
   "types": "dist/index.d.ts",
   "author": "Jukka Parkki",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seance/typed-config-dsl"
+  },
   "devDependencies": {
     "@types/jest": "^25.1.2",
     "@types/node": "^13.7.1",
