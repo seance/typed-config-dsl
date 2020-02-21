@@ -200,38 +200,6 @@ export const getInvalidConfigMessage = (config: InvalidConfig): string => {
   ].join('\n')}`;
 };
 
-export const _getInvalidConfigMessage = (config: InvalidConfig): string => {
-  const missingKeysColumns = padColumnsToMaxWidth([
-    config.missingKeys.map((v) => ` - ${v.key}`),
-    config.missingKeys.map((v) => v.type),
-  ]);
-  const malformedValuesColumns = padColumnsToMaxWidth([
-    config.malformedValues.map((v) => ` - ${v.key}`),
-    config.malformedValues.map((v) => v.type),
-    config.malformedValues.map((v) =>
-      v.sensitive ? '(sensitive)' : v.value ?? '(undefined)',
-    ),
-    config.malformedValues.map((v) => v.message ?? ''),
-  ]);
-  const missingKeysRows = config.missingKeys.map((_, i) =>
-    missingKeysColumns.map((c) => c[i]).join(' '),
-  );
-  const malformedValuesRows = config.malformedValues.map((_, i) =>
-    malformedValuesColumns.map((c) => c[i]).join(' '),
-  );
-  return `Invalid configuration:\n${[
-    ...(missingKeysRows.length
-      ? ['Missing values for following configuration keys:', ...missingKeysRows]
-      : []),
-    ...(malformedValuesRows.length
-      ? [
-          'Malformed values for following configuration keys:',
-          ...malformedValuesRows,
-        ]
-      : []),
-  ].join('\n')}`;
-};
-
 export const logValidConfig = <A>(
   config: ValidConfig<A>,
   logger: (message: string) => void,
