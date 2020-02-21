@@ -175,8 +175,11 @@ export const getInvalidConfigMessage = (config: InvalidConfig): string => {
   ].join('\n')}`;
 };
 
-export const printValidConfig = <A>(config: ValidConfig<A>): void => {
-  console.log(getValidConfigMessage(config));
+export const logValidConfig = <A>(
+  config: ValidConfig<A>,
+  logger: (message: string) => void,
+): void => {
+  logger(getValidConfigMessage(config));
 };
 
 export const throwConfigError = (config: InvalidConfig): never => {

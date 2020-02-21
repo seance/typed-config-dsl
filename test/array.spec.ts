@@ -53,7 +53,7 @@ describe('Array config reader', () => {
       type: 'number[]',
       value: '42,bar,1000',
       sensitive: false,
-      message: 'Cannot parse elements as float',
+      message: 'Cannot parse each element as float',
     });
     expect(c.array('ZUT').number().read()).toStrictEqual({
       result: 'missingKey',

@@ -84,4 +84,5 @@ export type Reader<A> = ConfigReader<A> | ShapeReader<A>;
 
 export interface Options {
   silent: boolean;
+  logger: (message: string) => void;
 }

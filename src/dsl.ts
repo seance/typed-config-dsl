@@ -7,6 +7,8 @@ import {
 import { constantReader, requiredReader } from './readers';
 import { valid, malformedValue } from './utils';
 
+const numRegex = /^-?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?$/;
+
 export const constant = <A>(value: A): ConfigReader<A> & SensitiveDsl<A> =>
   constantReader(value);
 
@@ -23,10 +25,27 @@ export const number = (key: string): ConfigReaderDsl<number> =>
     key,
     'number',
     (value) => parseFloat(value),
-    (value, type, sensitive, raw) =>
-      !isNaN(value)
-        ? valid(value, key, type, sensitive)
-        : malformedValue(key, type, raw, sensitive, 'Cannot parse as float'),
+    (value, type, sensitive, raw) => {
+      if (isNaN(value)) {
+        return malformedValue(
+          key,
+          type,
+          raw,
+          sensitive,
+          'Cannot parse as float',
+        );
+      }
+      if (!raw.match(numRegex)) {
+        return malformedValue(
+          key,
+          type,
+          raw,
+          sensitive,
+          'Badly formatted number',
+        );
+      }
+      return valid(value, key, type, sensitive);
+    },
   );
 
 export const boolean = (key: string): ConfigReaderDsl<boolean> =>
@@ -72,7 +91,7 @@ export const array = (
               type,
               raw,
               sensitive,
-              'Cannot parse elements as float',
+              'Cannot parse each element as float',
             ),
     );
   },

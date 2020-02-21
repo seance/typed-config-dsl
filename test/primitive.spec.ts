@@ -56,6 +56,7 @@ describe('Primitive config reader', () => {
     setupEnv({
       FOO: '42',
       BAR: 'bar',
+      BAZ: '42 hello there 3',
     });
     expect(c.number('FOO').read()).toStrictEqual({
       result: 'success',
@@ -71,6 +72,14 @@ describe('Primitive config reader', () => {
       value: 'bar',
       sensitive: false,
       message: 'Cannot parse as float',
+    });
+    expect(c.number('BAZ').read()).toStrictEqual({
+      result: 'malformedValue',
+      key: 'BAZ',
+      type: 'number',
+      value: '42 hello there 3',
+      sensitive: false,
+      message: 'Badly formatted number',
     });
     expect(c.number('ZUT').read()).toStrictEqual({
       result: 'missingKey',
