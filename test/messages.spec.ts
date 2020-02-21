@@ -84,14 +84,14 @@ describe('Messages', () => {
       expect(message).toBe([
         'Invalid configuration:',
         'Missing values for following configuration keys:',
-        ' - BAR                 string  ',
-        ' - ARRAYS_FOO          string[]',
-        ' - SENSITIVES_PASSWORD string  ',
+        ' - BAR                 string   ',
+        ' - ARRAYS_FOO          string[] ',
+        ' - SENSITIVES_PASSWORD string   ',
         'Malformed values for following configuration keys:',
-        ' - BAZ        number    baz          Cannot parse as float                        ',
-        ' - ZUT        boolean   yes          Expected `true` or `false`                   ',
-        ' - ARRAYS_BAR number[]  1,two,3      Cannot parse each element as float           ',
-        ' - ARRAYS_BAZ boolean[] truey,falsey Expected each element to be `true` or `false`',
+        ' - BAZ                 number    baz          Cannot parse as float                        ',
+        ' - ZUT                 boolean   yes          Expected `true` or `false`                   ',
+        ' - ARRAYS_BAR          number[]  1,two,3      Cannot parse each element as float           ',
+        ' - ARRAYS_BAZ          boolean[] truey,falsey Expected each element to be `true` or `false`',
       ].join('\n'));
     }
   });

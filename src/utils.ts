@@ -117,6 +117,8 @@ export const mapConfigValidation = <A, B>(f: (value: A) => B) => (
   return (validation as unknown) as ConfigValidation<B>;
 };
 
+const range = (n: number) => [...new Array(n).keys()];
+
 const maxWidth = (max: number, str: string) => Math.max(max, str.length);
 
 const padToWidth = (width: number) => (str: string) =>
@@ -125,6 +127,24 @@ const padToWidth = (width: number) => (str: string) =>
 const padColumnsToMaxWidth = (columns: string[][]): string[][] => {
   const maxWidths = columns.map((c) => c.reduce(maxWidth, 0));
   return maxWidths.map((maxWidth, i) => columns[i].map(padToWidth(maxWidth)));
+};
+
+const padColumnGroupsToMaxWidth = (
+  columnGroups: string[][][],
+): string[][][] => {
+  const maxGroupWidths = columnGroups.map((columns) =>
+    columns.map((c) => c.reduce(maxWidth, 0)),
+  );
+  const maxColumns = columnGroups.reduce(
+    (max, cols) => Math.max(max, cols.length),
+    0,
+  );
+  const maxWidths = range(maxColumns).map((i) =>
+    maxGroupWidths.reduce((max, ws) => Math.max(max, ws[i] ?? 0), 0),
+  );
+  return columnGroups.map((columns) =>
+    columns.map((c, i) => c.map(padToWidth(maxWidths[i]))),
+  );
 };
 
 export const getValidConfigMessage = <A>(config: ValidConfig<A>): string => {
@@ -144,6 +164,43 @@ export const getValidConfigMessage = <A>(config: ValidConfig<A>): string => {
 };
 
 export const getInvalidConfigMessage = (config: InvalidConfig): string => {
+  const [
+    missingKeysColumns,
+    malformedValuesColumns,
+  ] = padColumnGroupsToMaxWidth([
+    [
+      config.missingKeys.map((v) => ` - ${v.key}`),
+      config.missingKeys.map((v) => v.type),
+    ],
+    [
+      config.malformedValues.map((v) => ` - ${v.key}`),
+      config.malformedValues.map((v) => v.type),
+      config.malformedValues.map((v) =>
+        v.sensitive ? '(sensitive)' : v.value ?? '(undefined)',
+      ),
+      config.malformedValues.map((v) => v.message ?? ''),
+    ],
+  ]);
+  const missingKeysRows = config.missingKeys.map((_, i) =>
+    missingKeysColumns.map((c) => c[i]).join(' '),
+  );
+  const malformedValuesRows = config.malformedValues.map((_, i) =>
+    malformedValuesColumns.map((c) => c[i]).join(' '),
+  );
+  return `Invalid configuration:\n${[
+    ...(missingKeysRows.length
+      ? ['Missing values for following configuration keys:', ...missingKeysRows]
+      : []),
+    ...(malformedValuesRows.length
+      ? [
+          'Malformed values for following configuration keys:',
+          ...malformedValuesRows,
+        ]
+      : []),
+  ].join('\n')}`;
+};
+
+export const _getInvalidConfigMessage = (config: InvalidConfig): string => {
   const missingKeysColumns = padColumnsToMaxWidth([
     config.missingKeys.map((v) => ` - ${v.key}`),
     config.missingKeys.map((v) => v.type),

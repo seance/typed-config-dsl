@@ -1,7 +1,7 @@
 import * as c from '../src/index';
 import { setupEnv } from './setupEnv';
 
-const silent: c.Options = { silent: true };
+const silent: Partial<c.Options> = { silent: true };
 
 describe('readConfig', () => {
   it('reads primitive and array values', () => {
