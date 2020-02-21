@@ -51,6 +51,9 @@ describe('Messages', () => {
         ' - SENSITIVES_PASSWORD string    (sensitive)',
       ].join('\n'));
     }
+
+    // Exercise logging
+    c.readConfig(reader);
   });
 
   it('show invalid configuration', () => {

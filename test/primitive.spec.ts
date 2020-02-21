@@ -1,4 +1,6 @@
 import * as c from '../src/index';
+import { transformAndValidate } from '../src/validation';
+import { valid } from '../src/utils';
 import { setupEnv } from './setupEnv';
 
 describe('Primitive config reader', () => {
@@ -23,6 +25,13 @@ describe('Primitive config reader', () => {
       type: typeof true,
       value: true,
       sensitive: false,
+    });
+    expect(c.constant('secret').sensitive().read()).toStrictEqual({
+      result: 'success',
+      key: '(constant)',
+      type: typeof 'secret',
+      value: 'secret',
+      sensitive: true,
     });
   });
 
@@ -49,6 +58,20 @@ describe('Primitive config reader', () => {
       result: 'missingKey',
       key: 'ZUT',
       type: 'string',
+    });
+    expect(c.string('QUX').optional().sensitive().read()).toStrictEqual({
+      result: 'success',
+      key: 'QUX',
+      type: 'string',
+      value: undefined,
+      sensitive: true,
+    });
+    expect(c.string('XUZ').default('xuz').sensitive().read()).toStrictEqual({
+      result: 'success',
+      key: 'XUZ',
+      type: 'string',
+      value: 'xuz',
+      sensitive: true,
     });
   });
 
@@ -112,6 +135,29 @@ describe('Primitive config reader', () => {
       result: 'missingKey',
       key: 'ZUT',
       type: 'boolean',
+    });
+  });
+
+  it('xxx', () => {
+    const reader: c.ConfigReader<string> = {
+      read() {
+        return transformAndValidate(
+          '(custom)',
+          'string',
+          'foo',
+          () => { throw new Error('BOOM!'); },
+          (value, type, sensitive) => valid(value, '(custom)', type, sensitive),
+          false,
+        );
+      }
+    };
+    expect(reader.read()).toStrictEqual({
+      result: 'malformedValue',
+      key: '(custom)',
+      type: 'string',
+      value: 'foo',
+      sensitive: false,
+      message: 'BOOM!',
     });
   });
 });

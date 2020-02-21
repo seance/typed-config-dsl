@@ -6,6 +6,7 @@ describe('Array config reader', () => {
     setupEnv({
       FOO: 'foo,bar,zut',
       BAR: '',
+      BAZ: 'qux;plox',
     });
     expect(c.array('FOO').string().read()).toStrictEqual({
       result: 'success',
@@ -19,6 +20,13 @@ describe('Array config reader', () => {
       key: 'BAR',
       type: 'string[]',
       value: [''],
+      sensitive: false,
+    });
+    expect(c.array('BAZ', ';').string().read()).toStrictEqual({
+      result: 'success',
+      key: 'BAZ',
+      type: 'string[]',
+      value: ['qux', 'plox'],
       sensitive: false,
     });
     expect(c.array('ZUT').string().default([]).read()).toStrictEqual({
