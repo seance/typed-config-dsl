@@ -1,6 +1,6 @@
 # typed-config-dsl
 
-[![Travis build status](http://img.shields.io/travis/seance/typed-config-dsl/master.svg?style=flat-square)](https://travis-ci.org/seance/typed-config-dsl)
+[![Travis build status](http://img.shields.io/travis/com/seance/typed-config-dsl/master.svg?style=flat-square)](https://travis-ci.com/seance/typed-config-dsl)
 
 
 A focused, lightweight DSL for reading typed configuration from the environment.
