@@ -47,6 +47,7 @@ describe('Array config reader', () => {
     setupEnv({
       FOO: '1,42,1e20',
       BAR: '42,bar,1000',
+      BAZ: '42e,1e1',
     });
     expect(c.array('FOO').number().read()).toStrictEqual({
       result: 'success',
@@ -62,6 +63,14 @@ describe('Array config reader', () => {
       value: '42,bar,1000',
       sensitive: false,
       message: 'Cannot parse each element as float',
+    });
+    expect(c.array('BAZ').number().read()).toStrictEqual({
+      result: 'malformedValue',
+      key: 'BAZ',
+      type: 'number[]',
+      value: '42e,1e1',
+      sensitive: false,
+      message: 'Badly formatted number element',
     });
     expect(c.array('ZUT').number().read()).toStrictEqual({
       result: 'missingKey',

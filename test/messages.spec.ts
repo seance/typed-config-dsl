@@ -76,7 +76,7 @@ describe('Messages', () => {
         baz: c.array('ARRAYS_BAZ').boolean(),
       },
       sensitives: {
-        password: c.string('SENSITIVES_PASSWORD').sensitive(),
+        number: c.number('SENSITIVES_NUMBER').sensitive(),
       },
     };
     const validation = readConfigValidation(reader);
@@ -87,14 +87,14 @@ describe('Messages', () => {
       expect(message).toBe([
         'Invalid configuration:',
         'Missing values for following configuration keys:',
-        ' - BAR                 string   ',
-        ' - ARRAYS_FOO          string[] ',
-        ' - SENSITIVES_PASSWORD string   ',
+        ' - BAR               string   ',
+        ' - ARRAYS_FOO        string[] ',
         'Malformed values for following configuration keys:',
-        ' - BAZ                 number    baz          Cannot parse as float                        ',
-        ' - ZUT                 boolean   yes          Expected `true` or `false`                   ',
-        ' - ARRAYS_BAR          number[]  1,two,3      Cannot parse each element as float           ',
-        ' - ARRAYS_BAZ          boolean[] truey,falsey Expected each element to be `true` or `false`',
+        ' - BAZ               number    baz          Cannot parse as float                        ',
+        ' - ZUT               boolean   yes          Expected `true` or `false`                   ',
+        ' - ARRAYS_BAR        number[]  1,two,3      Cannot parse each element as float           ',
+        ' - ARRAYS_BAZ        boolean[] truey,falsey Expected each element to be `true` or `false`',
+        ' - SENSITIVES_NUMBER number    (sensitive)  Cannot parse as float                        ',
       ].join('\n'));
     }
   });
