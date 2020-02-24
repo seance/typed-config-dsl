@@ -83,16 +83,27 @@ export const array = (
       key,
       'number[]',
       (value) => value.split(separator).map((s) => parseFloat(s)),
-      (value, type, sensitive, raw) =>
-        value.every((v) => !isNaN(v))
-          ? valid(value, key, type, sensitive)
-          : malformedValue(
-              key,
-              type,
-              raw,
-              sensitive,
-              'Cannot parse each element as float',
-            ),
+      (value, type, sensitive, raw) => {
+        if (value.some(isNaN)) {
+          return malformedValue(
+            key,
+            type,
+            raw,
+            sensitive,
+            'Cannot parse each element as float',
+          );
+        }
+        if (raw.split(separator).some((v) => !v.match(numRegex))) {
+          return malformedValue(
+            key,
+            type,
+            raw,
+            sensitive,
+            'Badly formatted number element',
+          );
+        }
+        return valid(value, key, type, sensitive);
+      },
     );
   },
 
