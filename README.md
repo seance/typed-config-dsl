@@ -173,7 +173,7 @@ Builds a *required* reader for a boolean-valued configuration key. The value is 
 
 *Example:*
 ```typescript
-const reader: ConfigReader<boolean> = number('FOO');
+const reader: ConfigReader<boolean> = boolean('FOO');
 ```
 
 #### `array`
