@@ -5,4 +5,4 @@ cache: yarn
 script:
   - yarn prettier
   - yarn build
-  - yarn test --coverage
+  - yarn coveralls

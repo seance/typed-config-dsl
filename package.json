@@ -20,6 +20,7 @@
   "devDependencies": {
     "@types/jest": "^25.1.2",
     "@types/node": "^13.7.1",
+    "coveralls": "^3.0.9",
     "jest": "^25.1.0",
     "prettier": "1.19.1",
     "ts-jest": "^25.2.0",
@@ -34,6 +35,7 @@
     "watch": "tsc --watch",
     "prettier": "prettier --check 'src/**/*'",
     "test": "jest",
+    "coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "prepublishOnly": "yarn build"
   }
 }
