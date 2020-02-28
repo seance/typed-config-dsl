@@ -16,10 +16,14 @@
     "jest": "^25.1.0",
     "prettier": "1.19.1",
     "ts-jest": "^25.2.0",
-    "typescript": "^3.7.5"
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.5",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
   },
   "scripts": {
-    "build": "tsc",
+    "clean": "rm -rf dist && rm -rf coverage",
+    "build": "yarn clean && webpack",
     "watch": "tsc --watch",
     "prettier": "prettier --check 'src/**/*'",
     "test": "jest",
