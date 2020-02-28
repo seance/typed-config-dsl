@@ -34,6 +34,6 @@
     "watch": "tsc --watch",
     "prettier": "prettier --check 'src/**/*'",
     "test": "jest",
-    "prepublish": "yarn build"
+    "prepublishOnly": "yarn build"
   }
 }
