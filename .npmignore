@@ -1,2 +1,11 @@
-# Code coverage output
-coverage/
+# Use as whitelist.
+
+*
+
+# Never ignored:
+# package.json
+# README (and its variants)
+# CHANGELOG (and its variants)
+# LICENSE / LICENCE
+
+!dist/
