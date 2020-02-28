@@ -1,7 +1,8 @@
 # typed-config-dsl
 
-[![Travis build status](http://img.shields.io/travis/com/seance/typed-config-dsl/master.svg?style=flat-square)](https://travis-ci.com/seance/typed-config-dsl)
-
+[![Travis](http://img.shields.io/travis/com/seance/typed-config-dsl/master.svg?style=flat-square)](https://travis-ci.com/seance/typed-config-dsl)
+[![Coveralls](https://img.shields.io/coveralls/seance/typed-config-dsl.svg?style=flat-square)](https://coveralls.io/github/seance/typed-config-dsl)
+[![Prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 A focused, lightweight DSL for reading typed configuration from the environment.
 
